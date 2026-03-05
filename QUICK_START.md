@@ -19,7 +19,7 @@ Here is how you would use this library inside a modern async framework like Fast
 
 ```python
 from fastapi import FastAPI
-from amazon-creators-async import AmazonCreatorsAsyncClient, Region
+from amazon_creators_async import AmazonCreatorsAsyncClient, Region
 
 app = FastAPI()
 

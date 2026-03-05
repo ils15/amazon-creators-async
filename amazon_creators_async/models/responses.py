@@ -65,10 +65,6 @@ class GetItemsResult(BaseAPIResponse):
 class GetItemsResponse(BaseAPIResponse):
     items_result: Optional[GetItemsResult] = None
     errors: Optional[List[Dict[str, str]]] = None
-from typing import List, Optional, Dict, Any
-from pydantic import Field
-
-from .responses import BaseAPIResponse, Item
 
 # Model for Traverse Tree of BrowseNodes
 class BrowseNode(BaseAPIResponse):

@@ -1,5 +1,5 @@
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, ConfigDict, Field
+from typing import List, Optional
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 class BaseAPIRequest(BaseModel):
     """
@@ -14,7 +14,7 @@ class BaseAPIRequest(BaseModel):
     )
 
 class GetItemsRequest(BaseAPIRequest):
-    item_ids: List[str]
+    item_ids: List[str] = Field(min_length=1, max_length=10)
     partner_tag: str
     partner_type: str = "Associates"
     marketplace: str
@@ -47,14 +47,28 @@ class SearchItemsRequest(BaseAPIRequest):
     search_index: Optional[str] = "All"
     sort_by: Optional[str] = None
     title: Optional[str] = None
-from typing import List, Optional
-from pydantic import Field
 
-from .requests import BaseAPIRequest
+    @model_validator(mode="after")
+    def validate_search_criteria(self):
+        if not any(
+            [
+                self.keywords,
+                self.actor,
+                self.artist,
+                self.author,
+                self.brand,
+                self.browse_node_id,
+                self.title,
+            ]
+        ):
+            raise ValueError(
+                "At least one search criterion must be provided: "
+                "keywords, actor, artist, author, brand, browse_node_id, or title."
+            )
+        return self
 
-# We need to re-import or define here since we are appending to the module
 class GetBrowseNodesRequest(BaseAPIRequest):
-    browse_node_ids: List[str]
+    browse_node_ids: List[str] = Field(min_length=1, max_length=10)
     partner_tag: str
     partner_type: str = "Associates"
     marketplace: str

@@ -1,5 +1,4 @@
-import asyncio
-from typing import Optional
+from typing import Tuple
 from aiolimiter import AsyncLimiter
 
 class RateLimiter:
@@ -8,10 +7,14 @@ class RateLimiter:
     The default is 1 TPS (Transaction Per Second) for the initial 30 days.
     """
     def __init__(self, tps: float = 1.0):
+        if tps <= 0:
+            raise ValueError("tps must be greater than 0")
+
         # aiolimiter takes max_rate and time_period.
         # e.g., max_rate=1, time_period=1 => 1 request per 1 second
         self.tps = tps
-        self._limiter = AsyncLimiter(max_rate=max_rate_from_tps(tps), time_period=1.0)
+        max_rate, time_period = limiter_config_from_tps(tps)
+        self._limiter = AsyncLimiter(max_rate=max_rate, time_period=time_period)
 
     async def acquire(self):
         """
@@ -19,12 +22,12 @@ class RateLimiter:
         """
         await self._limiter.acquire()
 
-def max_rate_from_tps(tps: float) -> int:
+def limiter_config_from_tps(tps: float) -> Tuple[int, float]:
     """
-    Helper to convert float TPS to a valid max_rate for aiolimiter.
-    If tps < 1 (e.g. 0.5), we could do 1 request every 2 seconds.
-    But aiolimiter works best with max_rate requests per time_period.
-    For simplicity, if tps is 1.0, max_rate is 1.
-    If tps is 10.0, max_rate is 10.
+    Convert TPS to (max_rate, time_period) for aiolimiter.
+    For TPS < 1, enforce one request every 1/tps seconds.
+    For TPS >= 1, use max_rate requests per second.
     """
-    return max(1, int(tps))
+    if tps < 1.0:
+        return 1, 1.0 / tps
+    return int(tps), 1.0

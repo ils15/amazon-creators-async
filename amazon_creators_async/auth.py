@@ -1,5 +1,6 @@
 import base64
 import time
+import asyncio
 import httpx
 from typing import Optional
 
@@ -28,8 +29,9 @@ class AuthManager:
         self.scope = get_scope(version)
         
         # Pass a client if you want to share the connection pool, otherwise we manage our own
-        self._client = client
+        self._client = client or httpx.AsyncClient(timeout=30.0)
         self._owns_client = client is None
+        self._token_lock = asyncio.Lock()
 
         # State for token caching
         self._access_token: Optional[str] = None
@@ -43,7 +45,11 @@ class AuthManager:
         if self._access_token and time.time() < (self._token_expires_at - 60):
             return self._access_token
 
-        return await self._fetch_new_token()
+        # Avoid parallel refreshes from concurrent API calls.
+        async with self._token_lock:
+            if self._access_token and time.time() < (self._token_expires_at - 60):
+                return self._access_token
+            return await self._fetch_new_token()
 
     async def _fetch_new_token(self) -> str:
         """
@@ -52,7 +58,6 @@ class AuthManager:
         """
         is_lwa = self.version.startswith("3.")
         
-        client = self._client or httpx.AsyncClient()
         try:
             if is_lwa:
                 # LWA (v3.1+) uses JSON body with credentials inside
@@ -63,7 +68,7 @@ class AuthManager:
                     "client_secret": self.credential_secret,
                     "scope": self.scope
                 }
-                response = await client.post(self.auth_url, headers=headers, json=payload)
+                response = await self._client.post(self.auth_url, headers=headers, json=payload)
             else:
                 # Cognito (v2.x) uses Basic Auth + form-encoded data
                 auth_string = f"{self.credential_id}:{self.credential_secret}"
@@ -76,7 +81,7 @@ class AuthManager:
                     "grant_type": "client_credentials",
                     "scope": self.scope
                 }
-                response = await client.post(self.auth_url, headers=headers, data=data)
+                response = await self._client.post(self.auth_url, headers=headers, data=data)
             
             if response.status_code != 200:
                 raise AuthenticationError(
@@ -93,6 +98,8 @@ class AuthManager:
             return self._access_token
         except httpx.RequestError as exc:
             raise AuthenticationError(f"HTTP error occurred while requesting auth token: {exc}") from exc
-        finally:
-            if self._owns_client:
-                await client.aclose()
+
+    async def close(self):
+        """Close internally managed HTTP client."""
+        if self._owns_client:
+            await self._client.aclose()

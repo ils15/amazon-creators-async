@@ -101,6 +101,34 @@ jobs:
           git commit -m "chore(release): v${{ steps.version.outputs.version }} [skip ci]" || echo "No changes to commit"
           git push origin master
 
+      - name: Extract release notes
+        id: release_notes
+        if: steps.version.outputs.should_publish == 'true' && steps.pypi_check.outputs.exists != 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python - << 'PY'
+          import os, re
+          version = os.environ["VERSION"]
+          with open("CHANGELOG.md", encoding="utf-8") as f:
+              content = f.read()
+          pattern = rf"## \[{re.escape(version)}\][^\n]*\n(.*?)(?=\n## \[|\Z)"
+          match = re.search(pattern, content, re.DOTALL)
+          notes = match.group(1).strip() if match else f"Release v{version}"
+          delimiter = "EOF_NOTES"
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"notes<<{delimiter}\n{notes}\n{delimiter}\n")
+          PY
+
+      - name: Create GitHub Release
+        if: steps.version.outputs.should_publish == 'true' && steps.pypi_check.outputs.exists != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          files: dist/*
+
       - name: Publish summary
         if: steps.version.outputs.should_publish == 'true'
         run: |

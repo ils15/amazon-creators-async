@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from amazon_creators_async.auth import AuthManager
-from amazon_creators_async.limiter import RateLimiter, limiter_config_from_tps
+from amazon_creators_async_api.auth import AuthManager
+from amazon_creators_async_api.limiter import RateLimiter, limiter_config_from_tps
 
 
 class MockAuthResponse:

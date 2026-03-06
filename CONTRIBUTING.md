@@ -1,4 +1,4 @@
-# Contributing to amazon-creators-async
+# Contributing to amazon-creators-async-api
 
 Thank you for your interest in contributing! This project follows the same open-source model as `aliexpress-async-api`.
 
@@ -11,8 +11,8 @@ Thank you for your interest in contributing! This project follows the same open-
 
 1.  **Fork** the repository and clone your fork:
     ```bash
-    git clone https://github.com/yourusername/amazon-creators-async.git
-    cd amazon-creators-async
+    git clone https://github.com/yourusername/amazon-creators-async-api.git
+    cd amazon-creators-async-api
     ```
 2.  **Create a virtual environment**:
     ```bash

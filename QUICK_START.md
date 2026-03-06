@@ -1,4 +1,4 @@
-# Quick Start: amazon-creators-async
+# Quick Start: amazon-creators-async-api
 
 Get up and running with the Amazon Creators API in 5 minutes!
 
@@ -10,7 +10,7 @@ Get up and running with the Amazon Creators API in 5 minutes!
 ## 1. Installation
 
 ```bash
-pip install amazon-creators-async
+pip install amazon-creators-async-api
 ```
 
 ## 2. Basic Setup (FastAPI Example)
@@ -19,7 +19,7 @@ Here is how you would use this library inside a modern async framework like Fast
 
 ```python
 from fastapi import FastAPI
-from amazon_creators_async import AmazonCreatorsAsyncClient, Region
+from amazon_creators_async_api import AmazonCreatorsAsyncClient, Region
 
 app = FastAPI()
 

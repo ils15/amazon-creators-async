@@ -1,6 +1,6 @@
 # Async Amazon Creators API (OAuth 2.0)
 
-[![PyPI version](https://img.shields.io/pypi/v/amazon-creators-async.svg)](https://pypi.org/project/amazon-creators-async/)
+[![PyPI version](https://img.shields.io/pypi/v/amazon-creators-async-api.svg)](https://pypi.org/project/amazon-creators-async-api/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Tests Passing](https://img.shields.io/badge/Tests-16%2F16%20Passing-brightgreen)](#)
@@ -24,14 +24,14 @@ A modern, high-performance, asynchronous Python wrapper for the **Amazon Creator
 ## Installation
 
 ```bash
-pip install amazon-creators-async
+pip install amazon-creators-async-api
 ```
 
 ## Quick Start
 
 ```python
 import asyncio
-from amazon_creators_async import AmazonCreatorsAsyncClient, Region
+from amazon_creators_async_api import AmazonCreatorsAsyncClient, Region
 
 async def main():
     async with AmazonCreatorsAsyncClient(
@@ -145,7 +145,7 @@ The Amazon API requires you to specify the `resources` you want returned to mini
 Use the typed constants from `resources.py` for IDE autocomplete and compile-time safety:
 
 ```python
-from amazon_creators_async import SearchItemsResources, GetItemsResources, Resources
+from amazon_creators_async_api import SearchItemsResources, GetItemsResources, Resources
 
 result = await client.search_items(
     keywords="Mechanical Keyboard",
@@ -194,7 +194,7 @@ The library automatically negotiates endpoints based on the `version` passed dur
 The library provides typed exceptions for easier error recovery:
 
 ```python
-from amazon_creators_async import (
+from amazon_creators_async_api import (
     AmazonCreatorsAsyncClient, 
     AuthenticationError, 
     RateLimitError, 
@@ -271,13 +271,13 @@ async def shutdown():
 | `RateLimitError: Rate limit exceeded` | Fired requests faster than TPS limit. | Increase `rate_limit_tps` if your account tier supports it, or reduce concurrent requests. Library retries automatically with exponential backoff. |
 | `InvalidRequestError: Invalid request` | Missing required fields in request. | `ValidationError` is raised by Pydantic before HTTP call. Check that your `search_items()` call has at least one search criterion (keywords, brand, browse_node_id, etc.). |
 | `APIError: API Error (500)` | Amazon service temporary outage. | Automatic retry with exponential backoff is applied. If persists, check [Amazon Status Page](https://status.aws.amazon.com). |
-| `ModuleNotFoundError: No module named 'aiolimiter'` | Dependencies not installed. | Run `pip install amazon-creators-async[dev]` or `pip install -e .[dev]` if developing. |
+| `ModuleNotFoundError: No module named 'aiolimiter'` | Dependencies not installed. | Run `pip install amazon-creators-async-api[dev]` or `pip install -e .[dev]` if developing. |
 
 ## Development & Testing
 
 Install extras:
 ```bash
-pip install amazon-creators-async[dev]  # pytest, pytest-asyncio
+pip install amazon-creators-async-api[dev]  # pytest, pytest-asyncio
 ```
 
 Run unit tests (no credentials needed):
@@ -300,12 +300,12 @@ python -m build && twine check dist/*
 - 🔗 [Amazon Creators API Official Docs](https://affiliate-program.amazon.com/creatorsapi/docs/en-us/introduction)
 - 📖 [Quick Start Guide](QUICK_START.md) – 5-minute setup with FastAPI example
 - 🤝 [Contributing Guide](CONTRIBUTING.md) – How to submit PRs and report issues
-- 📋 [Full API Reference](https://pypi.org/project/amazon-creators-async/) on PyPI
+- 📋 [Full API Reference](https://pypi.org/project/amazon-creators-async-api/) on PyPI
 
 ## Support & Community
 
-- **Report bugs** via [GitHub Issues](https://github.com/ils15/amazon-creators-async/issues)
-- **Discuss features** in [GitHub Discussions](https://github.com/ils15/amazon-creators-async)
+- **Report bugs** via [GitHub Issues](https://github.com/ils15/amazon-creators-async-api/issues)
+- **Discuss features** in [GitHub Discussions](https://github.com/ils15/amazon-creators-async-api)
 - **Commercial contact**: `contato@ofertachina.com.br`
 - **Website**: [ofertachina.com.br](https://ofertachina.com.br)
 - **Check status** of the Amazon Creators API at [AWS Health Dashboard](https://status.aws.amazon.com)

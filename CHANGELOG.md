@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2026-03-06
 ### Added
 - Automated release tooling with `scripts/bump_version.py` and `scripts/finalize_changelog.py`.
-- Automatic semantic version synchronization in package metadata (`pyproject.toml` and `amazon_creators_async/__init__.py`).
+- Automatic semantic version synchronization in package metadata (`pyproject.toml` and `amazon_creators_async_api/__init__.py`).
 - `resources.py`: new module with typed string constants for every official resource of all four operations (`SearchItemsResources`, `GetItemsResources`, `GetVariationsResources`, `GetBrowseNodesResources`, flat `Resources` superclass).
 - `SearchItemsRequest`: new fields `availability`, `min_reviews_rating` (1–4), `min_saving_percent` (1–99), `properties`.
 - `GetItemsRequest`: new field `item_id_type` (default `"ASIN"`).
@@ -60,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-03-05
 ### Added
-- Initial release of the `amazon-creators-async` wrapper.
+- Initial release of the `amazon-creators-async-api` wrapper.
 - Full OAuth 2.0 support (Cognito v2.x and LWA v3.x credentials).
 - Native asynchronous core leveraging `httpx`.
 - Configurable Rate Limiting defaulting to 1 TPS via `aiolimiter`.

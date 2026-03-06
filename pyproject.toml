@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "amazon-creators-async"
+name = "amazon-creators-async-api"
 version = "1.0.0"
 description = "A modern, high-performance asynchronous Python wrapper for the new Amazon Creators API (OAuth 2.0 based)."
 readme = "README.md"
@@ -40,9 +40,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/ils15/amazon-creators-async"
-Repository = "https://github.com/ils15/amazon-creators-async.git"
-"Bug Tracker" = "https://github.com/ils15/amazon-creators-async/issues"
+Homepage = "https://github.com/ils15/amazon-creators-async-api"
+Repository = "https://github.com/ils15/amazon-creators-async-api.git"
+"Bug Tracker" = "https://github.com/ils15/amazon-creators-async-api/issues"
 "Contact" = "https://ofertachina.com.br/contato"
 
 [tool.pytest.ini_options]

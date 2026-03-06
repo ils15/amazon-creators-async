@@ -2,13 +2,13 @@ import pytest
 import httpx
 from pydantic import ValidationError
 
-from amazon_creators_async.client import AmazonCreatorsAsyncClient
-from amazon_creators_async.models.requests import (
+from amazon_creators_async_api.client import AmazonCreatorsAsyncClient
+from amazon_creators_async_api.models.requests import (
     GetItemsRequest,
     GetVariationsRequest,
     SearchItemsRequest,
 )
-from amazon_creators_async.models.responses import (
+from amazon_creators_async_api.models.responses import (
     AvailabilityInfo,
     ConditionInfo,
     DealDetails,
@@ -24,7 +24,7 @@ from amazon_creators_async.models.responses import (
     VariationSummary,
     VariationsResult,
 )
-from amazon_creators_async.resources import (
+from amazon_creators_async_api.resources import (
     SearchItemsResources,
     GetItemsResources,
     GetVariationsResources,

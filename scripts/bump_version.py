@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Tuple
 
 PYPROJECT_PATH = Path("pyproject.toml")
-INIT_PATH = Path("amazon_creators_async/__init__.py")
+INIT_PATH = Path("amazon_creators_async_api/__init__.py")
 
 
 def get_current_version() -> str:

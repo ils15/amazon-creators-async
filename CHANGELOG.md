@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Automated release tooling with `scripts/bump_version.py` and `scripts/finalize_changelog.py`.
+- Automatic semantic version synchronization in package metadata (`pyproject.toml` and `amazon_creators_async/__init__.py`).
+
+### Changed
+- PyPI publish workflow now runs on `master` pushes/merges with automated build, validation, and publish steps.
+- Release pipeline now finalizes changelog entries by converting `## [Unreleased]` into `## [X.Y.Z] - YYYY-MM-DD` during release.
+- Test workflow now includes `develop` branch for push and pull request validation.
+- Marketplace domain validation was hardened to accept only valid `www.amazon.*` patterns.
+
+### Fixed
+- Reduced risk of sensitive data leakage by sanitizing and truncating API/auth error payloads before raising exceptions.
+- Removed accidental debug artifact from repository (`debug_response.py`).
+
 ## [0.1.1] - 2026-03-05
 ### Changed
 - Standardized project contact metadata to `contato@ofertachina.com.br` and official contact URL.

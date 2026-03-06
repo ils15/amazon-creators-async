@@ -7,6 +7,14 @@ from typing import Optional
 from .exceptions import AuthenticationError
 from .utils import get_auth_endpoint, get_scope
 
+
+def _safe_error_snippet(text: str, max_len: int = 240) -> str:
+    """Return a short single-line snippet for safer exception messages."""
+    normalized = " ".join(text.split())
+    if len(normalized) > max_len:
+        return normalized[:max_len] + "..."
+    return normalized
+
 class AuthManager:
     """
     Manages OAuth 2.0 Client Credentials token fetching and caching
@@ -84,12 +92,19 @@ class AuthManager:
                 response = await self._client.post(self.auth_url, headers=headers, data=data)
             
             if response.status_code != 200:
+                snippet = _safe_error_snippet(response.text)
                 raise AuthenticationError(
-                    f"Failed to obtain token ({self.version}). Status: {response.status_code}. Response: {response.text}"
+                    f"Failed to obtain token ({self.version}). Status: {response.status_code}. "
+                    f"Response preview: {snippet}"
                 )
 
-            payload_data = response.json()
-            self._access_token = payload_data["access_token"]
+            try:
+                payload_data = response.json()
+                self._access_token = payload_data["access_token"]
+            except (ValueError, KeyError, TypeError) as exc:
+                raise AuthenticationError(
+                    "Invalid auth response format: missing or malformed access_token"
+                ) from exc
             
             # Usually expires in 3600 seconds (1 hour)
             expires_in = payload_data.get("expires_in", 3600)

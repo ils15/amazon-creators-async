@@ -47,5 +47,5 @@ Repository = "https://github.com/ils15/amazon-creators-async.git"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-testpaths = ["tests", "."]
+testpaths = ["tests"]
 

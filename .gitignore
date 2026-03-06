@@ -30,9 +30,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Test scripts (local usage only)
-test_*.py
-debug_*.py
+# Test scripts (local usage only – root-level integration tests that need live credentials)
+/test_*.py
+/debug_*.py
 RELEASE_FLOW.md
 
 # IDEs and Editors

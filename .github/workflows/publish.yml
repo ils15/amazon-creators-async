@@ -33,7 +33,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          python -m pytest -q
+          python -m pytest tests/ -q
 
       - name: Bump version
         id: version

@@ -2,7 +2,11 @@
 Utilities and constants for the Amazon Creators API.
 """
 
+import re
 from enum import Enum
+
+
+_MARKETPLACE_RE = re.compile(r"^www\.amazon\.[a-z]{2,3}(?:\.[a-z]{2})?$")
 
 class Region(str, Enum):
     NORTH_AMERICA = "NA"
@@ -46,6 +50,11 @@ def get_scope(version: str) -> str:
     return "creatorsapi/default" # Cognito scope
 
 def validate_marketplace(marketplace: str):
-    """Simple check for typical marketplace domains."""
-    if not marketplace.startswith("www.amazon."):
-        raise ValueError("Marketplace must be a valid Amazon domain (e.g. 'www.amazon.com', 'www.amazon.com.br')")
+    """Validate marketplace domain format used by Amazon creators endpoints."""
+    if not isinstance(marketplace, str) or not marketplace:
+        raise ValueError("Marketplace must be a non-empty string.")
+
+    if not _MARKETPLACE_RE.fullmatch(marketplace.lower()):
+        raise ValueError(
+            "Marketplace must be a valid Amazon domain (e.g. 'www.amazon.com', 'www.amazon.com.br')."
+        )

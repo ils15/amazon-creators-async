@@ -9,6 +9,14 @@ from .exceptions import RateLimitError, InvalidRequestError, APIError
 from .models.requests import SearchItemsRequest, GetItemsRequest, GetBrowseNodesRequest, GetVariationsRequest
 from .models.responses import SearchItemsResponse, GetItemsResponse, GetBrowseNodesResponse, GetVariationsResponse
 
+
+def _safe_error_snippet(text: str, max_len: int = 240) -> str:
+    """Return a short single-line snippet for safer exception messages."""
+    normalized = " ".join(text.split())
+    if len(normalized) > max_len:
+        return normalized[:max_len] + "..."
+    return normalized
+
 class AmazonCreatorsAsyncClient:
     """
     Asynchronous client for the Amazon Creators API.
@@ -92,7 +100,8 @@ class AmazonCreatorsAsyncClient:
 
             if response.status_code == 429:
                 if attempt >= self.max_retries:
-                    raise RateLimitError(f"Rate limit exceeded: {response.text}")
+                    snippet = _safe_error_snippet(response.text)
+                    raise RateLimitError(f"Rate limit exceeded: {snippet}")
                 retry_after = response.headers.get("Retry-After")
                 delay = self.retry_backoff_seconds * (2 ** attempt)
                 if retry_after:
@@ -104,14 +113,16 @@ class AmazonCreatorsAsyncClient:
                 continue
 
             if response.status_code == 400:
-                raise InvalidRequestError(f"Invalid request: {response.text}")
+                snippet = _safe_error_snippet(response.text)
+                raise InvalidRequestError(f"Invalid request: {snippet}")
 
             if response.status_code in {500, 502, 503, 504} and attempt < self.max_retries:
                 await asyncio.sleep(self.retry_backoff_seconds * (2 ** attempt))
                 continue
 
+            snippet = _safe_error_snippet(response.text)
             raise APIError(
-                f"API Error ({response.status_code}): {response.text}",
+                f"API Error ({response.status_code}): {snippet}",
                 status_code=response.status_code,
             )
 

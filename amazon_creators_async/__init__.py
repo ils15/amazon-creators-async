@@ -15,3 +15,5 @@ __all__ = [
     "GetItemsResponse",
     "Region"
 ]
+
+__version__ = "0.1.1"

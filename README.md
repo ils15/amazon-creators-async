@@ -109,7 +109,6 @@ for item in result.search_result.items:
 ```
 
 See [PRICE_STRUCTURE.md](PRICE_STRUCTURE.md) for detailed documentation.
-
 ## Available Resources
 The Amazon API requires you to specify the `resources` you want returned to minimize payload size. We use the updated **lowerCamelCase** format required by v3.x of the API.
 Common Examples:

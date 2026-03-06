@@ -1,34 +1,107 @@
-name: Upload Python Package to PyPI
+name: Publish to PyPI
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  deploy:
+  test-and-publish:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build twine
-        
-    - name: Build package
-      run: python -m build
-      
-    - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install build twine
+
+      - name: Run unit tests
+        run: |
+          python -m pytest tests/ -q
+
+      - name: Bump version
+        id: version
+        env:
+          GIT_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          python scripts/bump_version.py
+
+      - name: Finalize changelog for release
+        if: steps.version.outputs.should_publish == 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python scripts/finalize_changelog.py
+
+      - name: Check version availability on PyPI
+        id: pypi_check
+        if: steps.version.outputs.should_publish == 'true'
+        run: |
+          python - << 'PY'
+          import json
+          import os
+          import urllib.request
+
+          package = "amazon-creators-async"
+          version = "${{ steps.version.outputs.version }}"
+          url = f"https://pypi.org/pypi/{package}/json"
+
+          exists = False
+          try:
+              with urllib.request.urlopen(url, timeout=10) as response:
+                  data = json.load(response)
+                  exists = version in data.get("releases", {})
+          except Exception:
+              # If PyPI is unavailable, continue and let publish step decide.
+              exists = False
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"exists={'true' if exists else 'false'}\\n")
+          PY
+
+      - name: Build package
+        if: steps.version.outputs.should_publish == 'true' && steps.pypi_check.outputs.exists != 'true'
+        run: |
+          python -m build
+
+      - name: Validate package
+        if: steps.version.outputs.should_publish == 'true' && steps.pypi_check.outputs.exists != 'true'
+        run: |
+          twine check dist/*
+
+      - name: Publish to PyPI
+        if: steps.version.outputs.should_publish == 'true' && steps.pypi_check.outputs.exists != 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Commit version bump
+        if: steps.version.outputs.should_publish == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pyproject.toml amazon_creators_async/__init__.py CHANGELOG.md
+          git commit -m "chore(release): v${{ steps.version.outputs.version }} [skip ci]" || echo "No changes to commit"
+          git push origin master
+
+      - name: Publish summary
+        if: steps.version.outputs.should_publish == 'true'
+        run: |
+          echo "Published version: ${{ steps.version.outputs.version }}"

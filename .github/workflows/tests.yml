@@ -2,9 +2,9 @@ name: Python package test
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: [ "master", "main", "develop" ]
   pull_request:
-    branches: [ "master", "main" ]
+    branches: [ "master", "main", "develop" ]
 
 jobs:
   build:
@@ -38,4 +38,4 @@ jobs:
     # or you can implement mock-based unittests later.
     - name: Project Install Verification
       run: |
-        python -c "import amazon-creators-async; print(amazon-creators-async.__version__)"
+        python -c "import amazon_creators_async; print(amazon_creators_async.__version__)"

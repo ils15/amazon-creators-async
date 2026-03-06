@@ -1,5 +1,6 @@
 # Environments
 .env
+.env.*
 venv/
 .venv/
 env/
@@ -31,6 +32,8 @@ MANIFEST
 
 # Test scripts (local usage only)
 test_*.py
+debug_*.py
+RELEASE_FLOW.md
 
 # IDEs and Editors
 .vscode/

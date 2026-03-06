@@ -12,7 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved release metadata consistency for PyPI packaging.
 
 ### Fixed
+- **CRITICAL**: Corrected Price model to match Amazon Creators API v3.x nested structure
+  - Price now correctly parses `money`, `savingBasis`, and `savings` nested objects
+  - Added `Money`, `Savings`, and `SavingBasis` Pydantic models for proper type safety
+  - Access current price via: `listing.price.money.display_amount` (was: `price.display_amount`)
+  - Access savings via: `listing.price.savings.money.display_amount`
+  - Old flat structure (`price.amount`, `price.display_amount`) is **removed**
+- Added `is_buy_box_winner` and `violates_map` fields to `Listing` model
 - Corrected license contact domain from `.com` to `.com.br`.
+
+### Documentation
+- Added `PRICE_STRUCTURE.md` with comprehensive price access examples and JSON structure
+- Updated README with "Accessing Price Information" section showing nested price usage
+- Updated test examples to demonstrate correct price access pattern
 
 ## [0.1.0] - 2026-03-05
 ### Added

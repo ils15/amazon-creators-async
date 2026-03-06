@@ -77,6 +77,39 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+### Accessing Price Information
+
+The API v3.x returns prices in a nested structure. Here's how to access pricing details:
+
+```python
+result = await client.search_items(
+    keywords="Monitor Gamer",
+    item_count=5,
+    resources=["itemInfo.title", "offersV2.listings.price"]
+)
+
+for item in result.search_result.items:
+    if item.offers_v2 and item.offers_v2.listings:
+        listing = item.offers_v2.listings[0]  # First listing (buy box winner)
+        
+        # Current price
+        if listing.price and listing.price.money:
+            print(f"Price: {listing.price.money.display_amount}")  # "R$ 588,90"
+            print(f"Amount: {listing.price.money.amount}")  # 588.9
+            print(f"Currency: {listing.price.money.currency}")  # "BRL"
+        
+        # Savings (if on sale)
+        if listing.price.savings:
+            print(f"Save: {listing.price.savings.money.display_amount}")  # "R$ 31,09"
+            print(f"Discount: {listing.price.savings.percentage}%")  # 5
+        
+        # Original price (before discount)
+        if listing.price.saving_basis:
+            print(f"Was: {listing.price.saving_basis.money.display_amount}")  # "R$ 619,99"
+```
+
+See [PRICE_STRUCTURE.md](PRICE_STRUCTURE.md) for detailed documentation.
+
 ## Available Resources
 The Amazon API requires you to specify the `resources` you want returned to minimize payload size. We use the updated **lowerCamelCase** format required by v3.x of the API.
 Common Examples:

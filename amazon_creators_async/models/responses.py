@@ -22,11 +22,31 @@ class Images(BaseAPIResponse):
     primary: Optional[Dict[str, Image]] = None
     variants: Optional[List[Dict[str, Image]]] = None
 
-class Price(BaseAPIResponse):
+class Money(BaseAPIResponse):
+    """Represents a monetary value with amount, currency, and display format."""
     amount: Optional[float] = None
     currency: Optional[str] = None
     display_amount: Optional[str] = None
-    savings: Optional[Dict[str, Any]] = None
+
+class Savings(BaseAPIResponse):
+    """Represents savings information with money and percentage."""
+    money: Optional[Money] = None
+    percentage: Optional[int] = None
+
+class SavingBasis(BaseAPIResponse):
+    """Represents the original/basis price for calculating savings."""
+    money: Optional[Money] = None
+    saving_basis_type: Optional[str] = None
+    saving_basis_type_label: Optional[str] = None
+
+class Price(BaseAPIResponse):
+    """
+    Price structure from Amazon Creators API v3.x.
+    Contains nested 'money', 'savingBasis', and 'savings' objects.
+    """
+    money: Optional[Money] = None
+    saving_basis: Optional[SavingBasis] = None
+    savings: Optional[Savings] = None
 
 class ItemInfo(BaseAPIResponse):
     title: Optional[Dict[str, str]] = None
@@ -38,6 +58,8 @@ class Listing(BaseAPIResponse):
     price: Optional[Price] = None
     delivery_info: Optional[Dict[str, Any]] = None
     condition: Optional[Dict[str, str]] = None
+    is_buy_box_winner: Optional[bool] = None
+    violates_map: Optional[bool] = None
 
 class OffersV2(BaseAPIResponse):
     listings: Optional[List[Listing]] = None

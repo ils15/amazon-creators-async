@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.1] - 2026-03-06
 ### Fixed
 - **CRITICAL**: Fixed package name in `client.py` `_pkg_version()` call from `"amazon-creators-async"` to `"amazon-creators-async-api"` — this was causing the client User-Agent to always report version `0.0.0`.
 - Fixed PyPI package name in `publish.yml` version check from `"amazon-creators-async"` to `"amazon-creators-async-api"` — CI was querying the wrong package.

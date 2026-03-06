@@ -67,3 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Endpoints: `search_items`, `get_items`, `get_browse_nodes`, `get_variations`.
 - PyPI release metadata (`pyproject.toml`).
 - Examples and documentation (README, QUICK_START, CONTRIBUTING).
+
+## [0.2.0] - 2026-03-06
+### Changed
+- Maintenance release.
+

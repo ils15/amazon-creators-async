@@ -26,7 +26,23 @@ Thank you for your interest in contributing! This project follows the same open-
 
 ## 🧪 Testing
 
-We use the provided `test_client.py` and `test_extra_endpoints.py` to validate API responses directly against Amazon's servers.
+### Unit Tests (no credentials required)
+
+Install dev dependencies first:
+
+```bash
+pip install -e '.[dev]'
+```
+
+Run the full unit test suite:
+
+```bash
+pytest tests/ -q
+```
+
+All 16 tests cover request validation, response parsing, rate limiting, and OAuth token management. They run without network access.
+
+### Integration Tests (requires Amazon credentials)
 
 1.  Create a `.env` file in the root directory:
     ```ini
@@ -35,10 +51,9 @@ We use the provided `test_client.py` and `test_extra_endpoints.py` to validate A
     AMAZON_PARTNER_TAG="yourtag-20"
     AMAZON_VERSION="3.1"
     ```
-2.  Run the tests:
+2.  Run the integration tests:
     ```bash
-    python test_client.py
-    python test_extra_endpoints.py
+    pytest test_client.py test_extra_endpoints.py -q
     ```
 3.  Ensure your code doesn't produce `400 Invalid Request` or `429 TooManyRequests`.
 

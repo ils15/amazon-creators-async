@@ -9,6 +9,12 @@ from .exceptions import RateLimitError, InvalidRequestError, APIError
 from .models.requests import SearchItemsRequest, GetItemsRequest, GetBrowseNodesRequest, GetVariationsRequest
 from .models.responses import SearchItemsResponse, GetItemsResponse, GetBrowseNodesResponse, GetVariationsResponse
 
+try:
+    from importlib.metadata import version as _pkg_version
+    _CLIENT_VERSION = _pkg_version("amazon-creators-async")
+except Exception:
+    _CLIENT_VERSION = "0.0.0"
+
 
 def _safe_error_snippet(text: str, max_len: int = 240) -> str:
     """Return a short single-line snippet for safer exception messages."""
@@ -84,7 +90,7 @@ class AmazonCreatorsAsyncClient:
                 "Content-Type": "application/json",
                 "Authorization": auth_header,
                 "x-marketplace": self.marketplace,
-                "User-Agent": "amazon_creators_async/0.1.0",
+                "User-Agent": f"amazon_creators_async/{_CLIENT_VERSION}",
             }
 
             try:

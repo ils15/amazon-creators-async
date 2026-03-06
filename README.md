@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/amazon-creators-async.svg)](https://pypi.org/project/amazon-creators-async/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Tests Passing](https://img.shields.io/badge/Tests-8%2F8%20Passing-brightgreen)](#)
+[![Tests Passing](https://img.shields.io/badge/Tests-16%2F16%20Passing-brightgreen)](#)
 [![Code Quality](https://img.shields.io/badge/Code%20Quality-Pydantic%20Validated-blue)](#)
 
 A modern, high-performance, asynchronous Python wrapper for the **Amazon Creators API** (successor to Product Advertising API 5.0). 
@@ -109,15 +109,69 @@ for item in result.search_result.items:
 ```
 
 See [PRICE_STRUCTURE.md](PRICE_STRUCTURE.md) for detailed documentation.
+
+### Advanced Search Filters
+
+`search_items()` supports several additional filters for precise results:
+
+```python
+result = await client.search_items(
+    keywords="Protein Powder",
+    availability="Available",      # "Available" | "IncludeOutOfStock"
+    min_reviews_rating=4,          # Minimum star rating: 1–4
+    min_saving_percent=20,         # Minimum discount %: 1–99
+    item_count=10,
+    item_page=1,
+    resources=[SearchItemsResources.ITEM_INFO_TITLE, SearchItemsResources.OFFERS_V2_PRICE],
+)
+```
+
+For `get_items()`, you can specify the item ID type:
+
+```python
+result = await client.get_items(
+    item_ids=["B09XYZ123"],
+    item_id_type="ASIN",  # Default — "ASIN" is the only officially supported type
+    resources=[GetItemsResources.ITEM_INFO_TITLE],
+)
+```
+
 ## Available Resources
-The Amazon API requires you to specify the `resources` you want returned to minimize payload size. We use the updated **lowerCamelCase** format required by v3.x of the API.
-Common Examples:
-- `itemInfo.title`
-- `offersV2.listings.price`
-- `images.primary.small`
-- `images.variants.large`
-- `itemInfo.features`
-- `browseNodeInfo.browseNodes`
+
+The Amazon API requires you to specify the `resources` you want returned to minimize payload size.
+
+### Type-Safe Resource Constants (Recommended)
+
+Use the typed constants from `resources.py` for IDE autocomplete and compile-time safety:
+
+```python
+from amazon_creators_async import SearchItemsResources, GetItemsResources, Resources
+
+result = await client.search_items(
+    keywords="Mechanical Keyboard",
+    resources=[
+        SearchItemsResources.ITEM_INFO_TITLE,          # "itemInfo.title"
+        SearchItemsResources.OFFERS_V2_PRICE,          # "offersV2.listings.price"
+        SearchItemsResources.IMAGES_PRIMARY_LARGE,     # "images.primary.large"
+        SearchItemsResources.OFFERS_V2_AVAILABILITY,   # "offersV2.listings.availability"
+        SearchItemsResources.BROWSE_NODE_INFO_BROWSE_NODES,
+        SearchItemsResources.SEARCH_REFINEMENTS,
+        SearchItemsResources.PARENT_ASIN,
+    ],
+)
+
+# Resources flat namespace — works across all operations:
+resources=[Resources.ITEM_INFO_TITLE, Resources.OFFERS_V2_PRICE]
+```
+
+Each operation has its own class with all supported resources:
+| Class | Operation |
+|---|---|
+| `SearchItemsResources` | `search_items()` |
+| `GetItemsResources` | `get_items()` |
+| `GetVariationsResources` | `get_variations()` |
+| `GetBrowseNodesResources` | `get_browse_nodes()` |
+| `Resources` | All operations (flat superclass) |
 
 ## Rate Limiting (Throttling)
 

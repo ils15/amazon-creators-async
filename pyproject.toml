@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "amazon-creators-async"
-version = "0.2.0"
+version = "1.0.0"
 description = "A modern, high-performance asynchronous Python wrapper for the new Amazon Creators API (OAuth 2.0 based)."
 readme = "README.md"
 requires-python = ">=3.8"

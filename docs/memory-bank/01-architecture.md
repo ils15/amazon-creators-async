@@ -1,4 +1,4 @@
-# Architecture — amazon-creators-async
+# Architecture — amazon-creators-async-api
 
 ## High-Level Design
 

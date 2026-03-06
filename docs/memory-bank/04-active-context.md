@@ -2,9 +2,9 @@
 
 ## Current Focus
 
-Promoting `amazon-creators-async` from **Beta (v0.1.2)** to **Stable (v1.0.0)**.
+`amazon-creators-async-api` is at **v1.0.0 (Production/Stable)**.
 
-**Status:** In implementation → waiting for CI publish pipeline to confirm v1.0.0 on PyPI.
+**Status:** Released. All v1.0.0 goals achieved and published to PyPI.
 
 ## Recent Decisions
 

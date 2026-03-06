@@ -11,7 +11,7 @@ from .models.responses import SearchItemsResponse, GetItemsResponse, GetBrowseNo
 
 try:
     from importlib.metadata import version as _pkg_version
-    _CLIENT_VERSION = _pkg_version("amazon-creators-async")
+    _CLIENT_VERSION = _pkg_version("amazon-creators-async-api")
 except Exception:
     _CLIENT_VERSION = "0.0.0"
 
@@ -90,7 +90,7 @@ class AmazonCreatorsAsyncClient:
                 "Content-Type": "application/json",
                 "Authorization": auth_header,
                 "x-marketplace": self.marketplace,
-                "User-Agent": f"amazon_creators_async/{_CLIENT_VERSION}",
+                "User-Agent": f"amazon_creators_async_api/{_CLIENT_VERSION}",
             }
 
             try:

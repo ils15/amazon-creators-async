@@ -26,7 +26,7 @@
 **Completed:**
 - Fixed critical Price model to match Amazon Creators API v3.x nested structure (`money`, `savingBasis`, `savings` objects)
 - Added `Money`, `Savings`, `SavingBasis` Pydantic models
-- Set up GitHub Actions CI/CD: `tests.yml` (matrix 3.9–3.12) + `publish.yml` (semver bump + PyPI)
+- Set up GitHub Actions CI/CD: `tests.yml` (matrix 3.8–3.12) + `publish.yml` (semver bump + PyPI + GitHub Release)
 - Created `scripts/bump_version.py` and `scripts/finalize_changelog.py`
 - Hardened marketplace domain validation
 - Published v0.1.1 to PyPI
@@ -44,12 +44,15 @@
 
 ---
 
-## Upcoming — v1.0.0: Stable Release
+## 2026-03-06 — v1.0.0: Stable Release
 
-**Planned:**
-- Remove Beta classifier → Production/Stable
-- Fix test badge (8/8 → 16/16)
-- Document Resources constants in README
-- Fix hardcoded User-Agent in client.py
-- Initialize `docs/memory-bank/`
-- Commit with `feat!:` prefix to trigger major bump `0.1.2 → 1.0.0`
+**Completed:**
+- Removed Beta classifier → Production/Stable
+- Fixed test badge (8/8 → 16/16)
+- Documented Resources constants in README
+- Fixed hardcoded User-Agent in client.py
+- Fixed package name in `_pkg_version()` and PyPI version check
+- Added GitHub Release automation (CHANGELOG notes + dist artifacts)
+- Fixed CI import verification step (wrong module name)
+- Initialized `docs/memory-bank/`
+- Published via `feat!:` major bump `0.1.2 → 1.0.0`

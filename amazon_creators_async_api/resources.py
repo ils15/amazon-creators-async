@@ -2,7 +2,7 @@
 String constants for the `resources` parameter of each Creators API operation.
 
 Usage:
-    from amazon_creators_async.resources import SearchItemsResources, GetItemsResources
+    from amazon_creators_async_api.resources import SearchItemsResources, GetItemsResources
 
     await client.search_items(
         keywords="laptop",

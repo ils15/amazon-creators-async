@@ -1,8 +1,8 @@
-# Project Overview — amazon-creators-async
+# Project Overview — amazon-creators-async-api
 
 ## What Is This?
 
-`amazon-creators-async` is a production-ready asynchronous Python wrapper for the **Amazon Creators API** (the OAuth 2.0-based successor to the Product Advertising API 5.0).
+`amazon-creators-async-api` is a production-ready asynchronous Python wrapper for the **Amazon Creators API** (the OAuth 2.0-based successor to the Product Advertising API 5.0).
 
 It is published on PyPI and maintained by **OfertaChina** (`contato@ofertachina.com.br`).
 
@@ -14,9 +14,9 @@ Enables Python developers and Amazon Associates to query the Amazon Creators API
 
 | Field | Value |
 |---|---|
-| PyPI package | `amazon-creators-async` |
-| Latest PyPI | `0.1.2` (promoted to `1.0.0` stable next) |
-| Status | Production/Stable (after v1.0.0 release) |
+| PyPI package | `amazon-creators-async-api` |
+| Latest PyPI | `1.0.0` |
+| Status | Production/Stable |
 | License | MIT |
 | Python | 3.8+ |
 

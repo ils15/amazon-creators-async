@@ -40,4 +40,4 @@ jobs:
 
     - name: Project Install Verification
       run: |
-        python -c "import amazon_creators_async; print(amazon_creators_async.__version__)"
+        python -c "import amazon_creators_async_api; print(amazon_creators_async_api.__version__)"

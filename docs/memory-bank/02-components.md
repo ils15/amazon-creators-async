@@ -1,4 +1,4 @@
-# Components — amazon-creators-async
+# Components — amazon-creators-async-api
 
 ## `AmazonCreatorsAsyncClient` (client.py)
 

@@ -1,4 +1,4 @@
-# Tech Context — amazon-creators-async
+# Tech Context — amazon-creators-async-api
 
 ## Runtime Stack
 
@@ -42,7 +42,7 @@ twine upload dist/* -u __token__ -p <PYPI_TOKEN>
 
 ### `tests.yml`
 - Trigger: push/PR to `master` or `develop`
-- Matrix: Python 3.9, 3.10, 3.11, 3.12
+- Matrix: Python 3.8, 3.9, 3.10, 3.11, 3.12
 - Steps: checkout → setup Python → `pip install -e '.[dev]'` → `pytest tests/ -q`
 
 ### `publish.yml`
@@ -57,6 +57,7 @@ twine upload dist/* -u __token__ -p <PYPI_TOKEN>
   3. `scripts/finalize_changelog.py` — converts `## [Unreleased]` → `## [X.Y.Z] - YYYY-MM-DD`
   4. Commit `chore(release): vX.Y.Z` (skipped by bump script to prevent loop)
   5. `python -m build && twine upload`
+  6. Create GitHub Release with `softprops/action-gh-release@v2` (CHANGELOG notes + `dist/*` artifacts)
 
 ## Branching Strategy
 
@@ -77,7 +78,7 @@ twine upload dist/* -u __token__ -p <PYPI_TOKEN>
 ## Repository Layout
 
 ```
-amazon_creators_async/
+amazon_creators_async_api/
 ├── __init__.py           ← public exports + __version__
 ├── client.py             ← AmazonCreatorsAsyncClient
 ├── auth.py               ← AuthManager (Cognito + LWA)

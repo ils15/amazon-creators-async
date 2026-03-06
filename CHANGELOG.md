@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- **CRITICAL**: Fixed package name in `client.py` `_pkg_version()` call from `"amazon-creators-async"` to `"amazon-creators-async-api"` — this was causing the client User-Agent to always report version `0.0.0`.
+- Fixed PyPI package name in `publish.yml` version check from `"amazon-creators-async"` to `"amazon-creators-async-api"` — CI was querying the wrong package.
+- Fixed incorrect `git add` path in `publish.yml` from `amazon_creators_async/__init__.py` to `amazon_creators_async_api/__init__.py` — version bump commits were not staging `__version__` changes.
+- Fixed wrong module name in `tests.yml` import verification step from `amazon_creators_async` to `amazon_creators_async_api` — was causing 5 CI failures across Python 3.8–3.12 matrix.
+- Fixed import example in `resources.py` docstring to use correct package name `amazon_creators_async_api`.
+- Fixed User-Agent header in `client.py` to use correct package name `amazon_creators_async_api`.
+
+### Added
+- GitHub Release automation: CI now creates tagged releases with CHANGELOG notes and dist artifacts (`dist/*.whl`, `dist/*.tar.gz`) using `softprops/action-gh-release@v2`.
+
+### Changed
+- Updated all documentation in `docs/memory-bank/` with correct package name, v1.0.0 status, and current CI matrix (Python 3.8–3.12).
+
 ## [1.0.0] - 2026-03-06
 ## [0.1.2] - 2026-03-06
 ### Added

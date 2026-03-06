@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 class BaseAPIRequest(BaseModel):
@@ -21,28 +21,31 @@ class GetItemsRequest(BaseAPIRequest):
     resources: Optional[List[str]] = None
     condition: Optional[str] = None
     currency_of_preference: Optional[str] = None
+    item_id_type: Optional[str] = "ASIN"
     languages_of_preference: Optional[List[str]] = None
-    merchant: Optional[str] = None
 
 class SearchItemsRequest(BaseAPIRequest):
     keywords: Optional[str] = None
     actor: Optional[str] = None
     artist: Optional[str] = None
     author: Optional[str] = None
+    availability: Optional[str] = None
     brand: Optional[str] = None
     browse_node_id: Optional[str] = None
     condition: Optional[str] = None
     currency_of_preference: Optional[str] = None
     delivery_flags: Optional[List[str]] = None
-    item_count: Optional[int] = Field(ge=1, le=10, default=10) # 10 items max per page usually
+    item_count: Optional[int] = Field(ge=1, le=10, default=10)
     item_page: Optional[int] = Field(ge=1, le=10, default=1)
     languages_of_preference: Optional[List[str]] = None
     marketplace: str
-    merchant: Optional[str] = None
-    min_price: Optional[int] = None
     max_price: Optional[int] = None
+    min_price: Optional[int] = None
+    min_reviews_rating: Optional[int] = Field(default=None, ge=1, le=4)
+    min_saving_percent: Optional[int] = Field(default=None, ge=1, le=99)
     partner_tag: str
     partner_type: str = "Associates"
+    properties: Optional[Dict[str, str]] = None
     resources: Optional[List[str]] = None
     search_index: Optional[str] = "All"
     sort_by: Optional[str] = None
@@ -83,8 +86,6 @@ class GetVariationsRequest(BaseAPIRequest):
     condition: Optional[str] = None
     currency_of_preference: Optional[str] = None
     languages_of_preference: Optional[List[str]] = None
-    merchant: Optional[str] = None
-    offer_count: Optional[int] = Field(ge=1, le=10, default=1)
     resources: Optional[List[str]] = None
     variation_count: Optional[int] = Field(ge=1, le=10, default=10)
     variation_page: Optional[int] = Field(ge=1, le=10, default=1)

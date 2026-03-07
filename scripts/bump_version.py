@@ -103,7 +103,17 @@ def write_outputs(version: str, should_publish: bool, bump_type: str) -> None:
 
 def main() -> None:
     commit_message = os.environ.get("GIT_COMMIT_MESSAGE", "")
-    bump_type = detect_bump_type(commit_message)
+
+    # BUMP_TYPE from PR label (set by auto-pr.yml) takes priority over parsing
+    # the commit message. This closes the loop between the AI classification
+    # in auto-pr and the actual version bump on master merge.
+    bump_type_override = os.environ.get("BUMP_TYPE", "").strip().lower()
+    if bump_type_override in ("major", "minor", "patch"):
+        bump_type = bump_type_override
+        print(f"Using bump type from PR label: {bump_type}")
+    else:
+        bump_type = detect_bump_type(commit_message)
+
     current_version = get_current_version()
 
     if bump_type == "none":

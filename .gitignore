@@ -30,10 +30,12 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Copilot agents (local only — never committed)
+.github/agents/
+
 # Test scripts (local usage only – root-level integration tests that need live credentials)
 /test_*.py
 /debug_*.py
-RELEASE_FLOW.md
 
 # IDEs and Editors
 .vscode/
